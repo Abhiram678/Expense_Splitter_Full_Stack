@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Expense Splitter{% endblock %}
+
+{% block content %}
+<!-- Hero Welcome Section -->
+<section class="hero-section text-center mb-5">
+    <div class="container">
+        <div class="hero-icon mb-3">
+            <i class="bi bi-wallet2"></i>
+        </div>
+        <h1 class="display-3 fw-bold mb-3">Expense Splitter</h1>
+        <p class="lead mb-4">Split bills, track expenses, and settle up with friends easily</p>
+        <div class="d-flex gap-3 justify-content-center flex-wrap">
+            <a href="{{ url_for('create_group') }}" class="btn btn-light btn-lg shadow btn-pulse">
+                <i class="bi bi-plus-circle me-2"></i>Create Group
+            </a>
+            <a href="#quick-split" class="btn btn-outline-light btn-lg">
+                <i class="bi bi-calculator me-2"></i>Quick Calculate
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Features Overview -->
+<section class="container mb-5">
+    <div class="row g-4 text-center">
+        <div class="col-md-3 col-sm-6">
+            <div class="card h-100 border-0 shadow-sm hover-card">
+                <div class="card-body p-4">
+                    <div class="text-primary mb-3" style="font-size: 2.5rem;">
+                        <i class="bi bi-people-fill"></i>
+                    </div>
+                    <h5 class="card-title">Create Groups</h5>
+                    <p class="card-text text-muted small">Organize expenses for trips, roommates, or events</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="card h-100 border-0 shadow-sm hover-card">
+                <div class="card-body p-4">
+                    <div class="text-success mb-3" style="font-size: 2.5rem;">
+                        <i class="bi bi-receipt"></i>
+                    </div>
+                    <h5 class="card-title">Track Expenses</h5>
+                    <p class="card-text text-muted small">Add expenses and split equally or custom</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="card h-100 border-0 shadow-sm hover-card">
+                <div class="card-body p-4">
+                    <div class="text-info mb-3" style="font-size: 2.5rem;">
+                        <i class="bi bi-graph-up"></i>
+                    </div>
+                    <h5 class="card-title">View Balances</h5>
+                    <p class="card-text text-muted small">See who owes what with automatic calculations</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="card h-100 border-0 shadow-sm hover-card">
+                <div class="card-body p-4">
+                    <div class="text-warning mb-3" style="font-size: 2.5rem;">
+                        <i class="bi bi-check2-circle"></i>
+                    </div>
+                    <h5 class="card-title">Settle Up</h5>
+                    <p class="card-text text-muted small">Record payments and update balances instantly</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Main Content -->
+<div class="row g-4">
+    <!-- Groups Section -->
+    <div class="col-lg-8">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="h4 mb-0"><i class="bi bi-collection me-2"></i>Your Groups</h2>
+            {% if groups %}
+            <span class="badge bg-primary rounded-pill">{{ groups|length }}</span>
+            {% endif %}
+        </div>
+        
+        {% if groups %}
+            <div class="row row-cols-1 row-cols-md-2 g-3">
+                {% for group in groups %}
+                <div class="col">
+                    <div class="card h-100 shadow-sm hover-card border-0">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold mb-2">{{ group.name }}</h5>
+                            <p class="card-text text-muted small mb-3">
+                                {{ group.description or 'No description' }}
+                            </p>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <small class="text-muted">
+                                    <i class="bi bi-people-fill me-1"></i>{{ group.member_count }} members
+                                </small>
+                                <span class="badge bg-success-subtle text-success fw-semibold">
+                                    ₹{{ "%.2f"|format(group.total_expenses) }}
+                                </span>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <a href="{{ url_for('group_detail', group_id=group.id) }}" 
+                                   class="btn btn-sm btn-primary flex-fill">
+                                    <i class="bi bi-box-arrow-in-right me-1"></i>Open
+                                </a>
+                                <form method="POST" action="{{ url_for('delete_group', group_id=group.id) }}" 
+                                      onsubmit="return confirm('Delete this group permanently?')" class="flex-fill">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger w-100">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="text-center py-5 bg-light rounded-3">
+                <i class="bi bi-inbox fs-1 text-muted d-block mb-3"></i>
+                <h4 class="text-muted">No groups yet</h4>
+                <p class="text-muted mb-3">Create your first group to start tracking expenses</p>
+                <a href="{{ url_for('create_group') }}" class="btn btn-primary">
+                    <i class="bi bi-plus-circle me-2"></i>Create First Group
+                </a>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Quick Split Sidebar -->
+    <div class="col-lg-4">
+        <div class="card shadow-sm border-0 sticky-lg-top" style="top: 80px;" id="quick-split">
+            <div class="card-header bg-gradient bg-primary text-white">
+                <h5 class="mb-0"><i class="bi bi-calculator me-2"></i>Quick Split Calculator</h5>
+            </div>
+            <div class="card-body">
+                <p class="text-muted small mb-4">
+                    Calculate splits instantly without creating a group
+                </p>
+                <form action="{{ url_for('quick_split_submit') }}" method="POST" id="quick-split-form">
+                    <div class="mb-3">
+                        <label for="qs_amount" class="form-label fw-semibold">Total Amount</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-currency-rupee"></i></span>
+                            <input type="number" step="0.01" min="0.01" 
+                                   class="form-control" id="qs_amount" name="qs_amount" 
+                                   placeholder="Enter amount" required>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="qs_people" class="form-label fw-semibold">Number of People</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-people"></i></span>
+                            <input type="number" min="1" 
+                                   class="form-control" id="qs_people" name="qs_people" 
+                                   placeholder="Enter count" required>
+                        </div>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <i class="bi bi-calculator-fill me-2"></i>Calculate
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
