@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}About - Expense Splitter{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <header class="text-center mb-5">
+                <h1 class="display-4 fw-bold">About Expense Splitter</h1>
+                <p class="lead text-muted">Making shared expenses simple and fair</p>
+            </header>
+
+            <section class="mb-5">
+                <div class="card shadow-sm border-light-subtle">
+                    <div class="card-body p-4">
+                        <h2 class="h4 mb-3"><i class="bi bi-info-circle-fill text-primary me-2"></i>What We Do</h2>
+                        <p class="lead">Expense Splitter helps you manage shared costs with friends, roommates, and groups. Whether it's a trip, household bills, or dinner with friends, we make it easy to track who paid what and who owes whom.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="mb-5">
+                <h2 class="h4 mb-4 text-center">Key Features</h2>
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="card h-100 border-primary">
+                            <div class="card-body">
+                                <h5 class="card-title"><i class="bi bi-people-fill text-primary me-2"></i>Group Management</h5>
+                                <p class="card-text">Create groups for different occasions - roommates, trips, events, or any shared expense scenario.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100 border-success">
+                            <div class="card-body">
+                                <h5 class="card-title"><i class="bi bi-calculator text-success me-2"></i>Smart Splitting</h5>
+                                <p class="card-text">Split expenses equally or customize shares. Our system automatically tracks balances for you.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100 border-info">
+                            <div class="card-body">
+                                <h5 class="card-title"><i class="bi bi-wallet2 text-info me-2"></i>Balance Tracking</h5>
+                                <p class="card-text">See at a glance who owes money and who is owed. No more confusion or forgotten debts.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100 border-warning">
+                            <div class="card-body">
+                                <h5 class="card-title"><i class="bi bi-check2-circle text-warning me-2"></i>Settlement System</h5>
+                                <p class="card-text">Record payments between members and watch balances update automatically.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="mb-5">
+                <div class="card shadow-sm border-light-subtle bg-light">
+                    <div class="card-body p-4">
+                        <h2 class="h4 mb-3"><i class="bi bi-code-slash text-primary me-2"></i>Built With</h2>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <ul class="list-unstyled">
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i><strong>Flask</strong> - Backend Framework</li>
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i><strong>Bootstrap 5</strong> - UI Components</li>
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i><strong>SQLite</strong> - Database</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <ul class="list-unstyled">
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i><strong>jQuery</strong> - Client-side Validation</li>
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i><strong>HTML5 & CSS3</strong> - Modern Web Standards</li>
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i><strong>Jinja2</strong> - Templating Engine</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="text-center">
+                <div class="card shadow-sm border-primary">
+                    <div class="card-body p-4">
+                        <h2 class="h4 mb-3">Ready to Get Started?</h2>
+                        <p class="mb-3">Create your first group and start tracking shared expenses today!</p>
+                        <a href="{{ url_for('create_group') }}" class="btn btn-primary btn-lg">
+                            <i class="bi bi-plus-circle me-2"></i>Create a Group
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+{% endblock %}
