@@ -1,0 +1,222 @@
+{% extends "base.html" %}
+
+{% block title %}Help & FAQ - Expense Splitter{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            <header class="text-center mb-5">
+                <h1 class="display-4 fw-bold">Help & FAQ</h1>
+                <p class="lead text-muted">Find answers to common questions</p>
+            </header>
+
+            <section class="mb-5">
+                <div class="accordion" id="faqAccordion">
+                    <!-- FAQ 1 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                <i class="bi bi-question-circle-fill text-primary me-2"></i>
+                                How do I create a group?
+                            </button>
+                        </h2>
+                        <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <p>Creating a group is simple:</p>
+                                <ol>
+                                    <li>Click on <strong>"Create Group"</strong> in the navigation bar or on the home page</li>
+                                    <li>Enter a name for your group (e.g., "Apartment Roomies", "Trip to Paris")</li>
+                                    <li>Optionally add a description</li>
+                                    <li>Add at least 2 member names</li>
+                                    <li>Click <strong>"Create Group"</strong> button</li>
+                                </ol>
+                                <p class="mb-0">You'll be redirected to the group page where you can start adding expenses!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ 2 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                <i class="bi bi-question-circle-fill text-primary me-2"></i>
+                                How do I add an expense?
+                            </button>
+                        </h2>
+                        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <p>To add an expense to a group:</p>
+                                <ol>
+                                    <li>Go to your group's page</li>
+                                    <li>Click <strong>"Add Expense"</strong></li>
+                                    <li>Enter a description (e.g., "Dinner", "Groceries")</li>
+                                    <li>Enter the amount</li>
+                                    <li>Select who paid for it</li>
+                                    <li>Choose how to split: equally among all members or custom amounts</li>
+                                    <li>Click <strong>"Add Expense"</strong></li>
+                                </ol>
+                                <p class="mb-0">The balances will update automatically!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ 3 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                <i class="bi bi-question-circle-fill text-primary me-2"></i>
+                                What's the difference between "Equal Split" and "Custom Split"?
+                            </button>
+                        </h2>
+                        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <p><strong>Equal Split:</strong> The expense is divided equally among all group members. For example, if the total is ₹600 and there are 3 members, each person owes ₹200.</p>
+                                <p><strong>Custom Split:</strong> You can specify exactly how much each person owes. This is useful when not everyone shares the expense equally. For example, if Alice had a ₹500 meal and Bob had a ₹300 meal, you can split accordingly.</p>
+                                <p class="mb-0"><em>Note: For custom splits, the total of all shares must equal the expense amount.</em></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ 4 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                                <i class="bi bi-question-circle-fill text-primary me-2"></i>
+                                How do balances work?
+                            </button>
+                        </h2>
+                        <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <p>The balance shows the net amount for each member:</p>
+                                <ul>
+                                    <li><strong class="text-success">Positive balance (green):</strong> This person is owed money</li>
+                                    <li><strong class="text-danger">Negative balance (red):</strong> This person owes money</li>
+                                    <li><strong class="text-muted">Zero balance:</strong> This person is settled up</li>
+                                </ul>
+                                <p class="mb-0">The balance is calculated as: (Total Paid) - (Total Share of Expenses) + (Settlements Received) - (Settlements Given)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ 5 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">
+                                <i class="bi bi-question-circle-fill text-primary me-2"></i>
+                                How do I record a payment between members?
+                            </button>
+                        </h2>
+                        <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <p>When someone pays back what they owe:</p>
+                                <ol>
+                                    <li>Go to the group page</li>
+                                    <li>Click <strong>"Settle Up"</strong></li>
+                                    <li>Select who paid (From)</li>
+                                    <li>Select who received the payment (To)</li>
+                                    <li>Enter the amount</li>
+                                    <li>Click <strong>"Record Payment"</strong></li>
+                                </ol>
+                                <p class="mb-0">The balances will automatically update, and the settlement will be recorded in the history.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ 6 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq6">
+                                <i class="bi bi-question-circle-fill text-primary me-2"></i>
+                                What is the Quick Split calculator?
+                            </button>
+                        </h2>
+                        <div id="faq6" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <p>The Quick Split calculator is a simple tool on the home page for one-off calculations. It's useful when you need to quickly figure out how to split a bill without creating a group or saving the data.</p>
+                                <p>Just enter the total amount and number of people, and it will instantly show you how much each person should pay.</p>
+                                <p class="mb-0"><em>Note: Quick Split results are not saved to any group.</em></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ 7 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq7">
+                                <i class="bi bi-question-circle-fill text-primary me-2"></i>
+                                Can I delete an expense or group?
+                            </button>
+                        </h2>
+                        <div id="faq7" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <p><strong>Delete an Expense:</strong> Yes! On the group page, find the expense in the list and click the <strong>Delete</strong> button next to it. The balances will automatically recalculate.</p>
+                                <p><strong>Delete a Group:</strong> Yes! On the home page, click the <strong>Delete</strong> button on the group card. This will permanently remove the group and all its expenses, members, and settlements.</p>
+                                <p class="mb-0 text-danger"><em>⚠️ Warning: Deletions cannot be undone!</em></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ 8 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq8">
+                                <i class="bi bi-question-circle-fill text-primary me-2"></i>
+                                Is my data saved?
+                            </button>
+                        </h2>
+                        <div id="faq8" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <p>Yes! All groups, expenses, and settlements are saved in a local database on the server. Your data persists across sessions.</p>
+                                <p class="mb-0"><em>Note: This is a demonstration app. For production use, consider implementing user authentication and cloud storage.</em></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="mb-5">
+                <div class="card shadow-sm border-primary">
+                    <div class="card-body p-4 text-center">
+                        <h3 class="h5 mb-3"><i class="bi bi-emoji-smile-fill text-warning me-2"></i>Still Have Questions?</h3>
+                        <p class="text-muted mb-3">The best way to learn is by trying! Create a test group and explore the features.</p>
+                        <a href="{{ url_for('create_group') }}" class="btn btn-primary">
+                            <i class="bi bi-plus-circle me-2"></i>Create a Test Group
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <div class="card shadow-sm bg-light">
+                    <div class="card-body p-4">
+                        <h3 class="h5 mb-3"><i class="bi bi-book-fill text-info me-2"></i>Quick Links</h3>
+                        <div class="row">
+                            <div class="col-md-6 mb-2">
+                                <a href="{{ url_for('index') }}" class="text-decoration-none">
+                                    <i class="bi bi-house-door me-1"></i> Home / Dashboard
+                                </a>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <a href="{{ url_for('create_group') }}" class="text-decoration-none">
+                                    <i class="bi bi-plus-circle me-1"></i> Create New Group
+                                </a>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <a href="{{ url_for('how_it_works') }}" class="text-decoration-none">
+                                    <i class="bi bi-lightbulb me-1"></i> How It Works
+                                </a>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <a href="{{ url_for('about') }}" class="text-decoration-none">
+                                    <i class="bi bi-info-circle me-1"></i> About Us
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+{% endblock %}
