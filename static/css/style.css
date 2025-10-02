@@ -1,0 +1,396 @@
+/* ============================================
+   Expense Splitter - Custom Styles
+   Color Scheme: Blue (#5da2d5) & Green (#90ee90)
+   ============================================ */
+
+/* CSS Variables */
+:root {
+    --primary-blue: #5da2d5;
+    --secondary-green: #90ee90;
+    --dark-blue: #4a8bb8;
+    --dark-green: #7fdf7f;
+    --light-blue: #b8d9ed;
+    --light-green: #c8f5c8;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --white: #ffffff;
+    --font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* ============================================
+   Base Styles
+   ============================================ */
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(135deg, #f0f8ff 0%, #f5fffa 100%);
+    font-family: var(--font-family);
+}
+
+main {
+    flex: 1;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* ============================================
+   Navbar Styles
+   ============================================ */
+
+.navbar {
+    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--dark-blue) 100%) !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,.15);
+    transition: all 0.3s ease;
+}
+
+.navbar-brand {
+    font-weight: 600;
+    font-size: 1.5rem;
+    transition: transform 0.3s ease, color 0.3s ease;
+    color: white !important;
+}
+
+.navbar-brand:hover {
+    transform: scale(1.05);
+    color: var(--light-green) !important;
+}
+
+.nav-link {
+    position: relative;
+    padding: 0.5rem 1rem !important;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.nav-link:hover {
+    color: var(--light-green) !important;
+    transform: translateY(-2px);
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 50%;
+    background-color: var(--secondary-green);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+
+.nav-link:hover::after {
+    width: 80%;
+}
+
+/* ============================================
+   Button Styles
+   ============================================ */
+
+.btn {
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--dark-blue) 100%);
+    border: none;
+    box-shadow: 0 4px 10px rgba(93, 162, 213, 0.3);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, var(--dark-blue) 0%, var(--primary-blue) 100%);
+    box-shadow: 0 6px 15px rgba(93, 162, 213, 0.5);
+}
+
+.btn-success {
+    background: linear-gradient(135deg, var(--secondary-green) 0%, var(--dark-green) 100%);
+    border: none;
+    color: #2d6b2d;
+    font-weight: 600;
+    box-shadow: 0 4px 10px rgba(144, 238, 144, 0.3);
+}
+
+.btn-success:hover {
+    background: linear-gradient(135deg, var(--dark-green) 0%, var(--secondary-green) 100%);
+    box-shadow: 0 6px 15px rgba(144, 238, 144, 0.5);
+    color: #2d6b2d;
+}
+
+.btn-outline-primary {
+    border-color: var(--primary-blue);
+    color: var(--primary-blue);
+}
+
+.btn-outline-primary:hover {
+    background: var(--primary-blue);
+    border-color: var(--primary-blue);
+    color: white;
+    transform: translateY(-2px);
+}
+
+.btn-outline-success {
+    border-color: var(--secondary-green);
+    color: #2d6b2d;
+}
+
+.btn-outline-success:hover {
+    background: var(--secondary-green);
+    border-color: var(--secondary-green);
+    color: #2d6b2d;
+    transform: translateY(-2px);
+}
+
+.btn-pulse {
+    animation: pulse 2s infinite;
+}
+
+.btn.loading {
+    position: relative;
+    pointer-events: none;
+}
+
+.btn.loading::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 50%;
+    left: 50%;
+    margin-left: -8px;
+    margin-top: -8px;
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: spinner 0.6s linear infinite;
+}
+
+/* ============================================
+   Card Styles
+   ============================================ */
+
+.card {
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.card:hover {
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.hover-card {
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: 1px solid rgba(93, 162, 213, 0.2);
+}
+
+.hover-card:hover {
+    transform: translateY(-8px);
+    border-color: var(--primary-blue);
+    box-shadow: 0 8px 20px rgba(93, 162, 213, 0.2) !important;
+}
+
+.card.border-success,
+.card.border-danger {
+    border-width: 2px;
+}
+
+/* ============================================
+   Hero Section
+   ============================================ */
+
+.hero-section {
+    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--dark-blue) 100%);
+    color: white;
+    padding: 3rem 0;
+    margin: -1.5rem -1.5rem 2rem -1.5rem;
+    border-radius: 0 0 1rem 1rem;
+    box-shadow: 0 4px 12px rgba(93, 162, 213, 0.3);
+}
+
+.hero-icon {
+    font-size: 4rem;
+    animation: float 3s ease-in-out infinite;
+    color: var(--light-green);
+}
+
+/* ============================================
+   Form Styles
+   ============================================ */
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 0.2rem rgba(93, 162, 213, 0.25);
+}
+
+.form-control,
+.form-select {
+    transition: all 0.3s ease;
+}
+
+.form-control:hover,
+.form-select:hover {
+    border-color: var(--light-blue);
+}
+
+/* ============================================
+   Footer Styles
+   ============================================ */
+
+footer,
+.footer-gradient {
+    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--dark-blue) 100%);
+    color: white;
+    padding: 2rem 0;
+    margin-top: 3rem;
+    box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+}
+
+footer a {
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+footer a:hover {
+    color: var(--light-green);
+    transform: translateX(3px);
+    display: inline-block;
+}
+
+/* ============================================
+   Badge & Text Colors
+   ============================================ */
+
+.badge {
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.badge:hover {
+    transform: scale(1.1);
+}
+
+.badge.bg-primary,
+.bg-primary {
+    background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue)) !important;
+}
+
+.badge.bg-success,
+.bg-success-subtle {
+    background: linear-gradient(135deg, var(--secondary-green), var(--dark-green)) !important;
+    color: #2d6b2d !important;
+}
+
+.text-primary {
+    color: var(--primary-blue) !important;
+}
+
+.text-success,
+.text-success-emphasis {
+    color: #2d6b2d !important;
+}
+
+.bg-light {
+    background-color: #f8fffe !important;
+}
+
+/* ============================================
+   Border Colors
+   ============================================ */
+
+.border-primary {
+    border-color: var(--primary-blue) !important;
+}
+
+.border-success {
+    border-color: var(--secondary-green) !important;
+}
+
+.border-info {
+    border-color: var(--light-blue) !important;
+}
+
+.border-warning {
+    border-color: #ffc107 !important;
+}
+
+/* ============================================
+   Accordion Styles
+   ============================================ */
+
+.accordion-button {
+    transition: all 0.3s ease;
+}
+
+.accordion-button:hover {
+    background-color: var(--light-blue);
+}
+
+.accordion-button:not(.collapsed) {
+    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--dark-blue) 100%);
+    color: white;
+}
+
+/* ============================================
+   Table Styles
+   ============================================ */
+
+.table-hover tbody tr {
+    transition: all 0.3s ease;
+}
+
+.table-hover tbody tr:hover {
+    background-color: var(--light-blue);
+    transform: scale(1.01);
+}
+
+/* ============================================
+   Animations
+   ============================================ */
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(144, 238, 144, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(144, 238, 144, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(144, 238, 144, 0); }
+}
+
+@keyframes spinner {
+    to { transform: rotate(360deg); }
+}
+
+/* ============================================
+   Responsive Design
+   ============================================ */
+
+@media (max-width: 768px) {
+    .display-4 {
+        font-size: 2rem;
+    }
+    .p-md-5 {
+        padding: 2rem !important;
+    }
+    .hero-section {
+        padding: 2rem 0;
+    }
+}
