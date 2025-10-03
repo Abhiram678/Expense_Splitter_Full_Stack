@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% block title %}How It Works - Expense Splitter{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            <header class="text-center mb-5">
+                <h1 class="display-4 fw-bold">How It Works</h1>
+                <p class="lead text-muted">Follow these simple steps to manage shared expenses</p>
+            </header>
+
+            <section class="mb-5">
+                <div class="row g-4">
+                    <!-- Step 1 -->
+                    <div class="col-md-6">
+                        <div class="card h-100 shadow-sm border-light-subtle">
+                            <div class="card-body p-4">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; font-size: 1.5rem; font-weight: bold;">
+                                        1
+                                    </div>
+                                    <h3 class="h5 mb-0 ms-3">Create a Group</h3>
+                                </div>
+                                <p class="text-muted">Start by creating a group for your shared expenses. Give it a name (e.g., "Apartment Roommates" or "Goa Trip") and add all the members who will be splitting costs.</p>
+                                <div class="bg-light p-3 rounded">
+                                    <small class="text-muted"><i class="bi bi-lightbulb-fill text-warning me-1"></i><strong>Tip:</strong> You need at least 2 members to create a group.</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="col-md-6">
+                        <div class="card h-100 shadow-sm border-light-subtle">
+                            <div class="card-body p-4">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; font-size: 1.5rem; font-weight: bold;">
+                                        2
+                                    </div>
+                                    <h3 class="h5 mb-0 ms-3">Add Expenses</h3>
+                                </div>
+                                <p class="text-muted">Whenever someone pays for something shared, add the expense to the group. Enter the description, amount, and who paid for it.</p>
+                                <div class="bg-light p-3 rounded">
+                                    <small class="text-muted"><i class="bi bi-lightbulb-fill text-warning me-1"></i><strong>Tip:</strong> You can split equally or customize shares for each member.</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="col-md-6">
+                        <div class="card h-100 shadow-sm border-light-subtle">
+                            <div class="card-body p-4">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="bg-info text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; font-size: 1.5rem; font-weight: bold;">
+                                        3
+                                    </div>
+                                    <h3 class="h5 mb-0 ms-3">Track Balances</h3>
+                                </div>
+                                <p class="text-muted">Our system automatically calculates who owes whom. Check the group's balance section to see who's owed money and who needs to pay.</p>
+                                <div class="bg-light p-3 rounded">
+                                    <small class="text-muted"><i class="bi bi-lightbulb-fill text-warning me-1"></i><strong>Tip:</strong> Balances update in real-time as you add expenses.</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="col-md-6">
+                        <div class="card h-100 shadow-sm border-light-subtle">
+                            <div class="card-body p-4">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="bg-warning text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; font-size: 1.5rem; font-weight: bold;">
+                                        4
+                                    </div>
+                                    <h3 class="h5 mb-0 ms-3">Settle Up</h3>
+                                </div>
+                                <p class="text-muted">When someone pays back what they owe, record the settlement. The balances will automatically adjust to reflect the payment.</p>
+                                <div class="bg-light p-3 rounded">
+                                    <small class="text-muted"><i class="bi bi-lightbulb-fill text-warning me-1"></i><strong>Tip:</strong> All settlements are recorded in the history for transparency.</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="mb-5">
+                <div class="card shadow-sm border-primary">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="h5 mb-0"><i class="bi bi-journal-text me-2"></i>Example Scenario</h3>
+                    </div>
+                    <div class="card-body p-4">
+                        <h4 class="h6 text-primary mb-3">Weekend Trip with Friends</h4>
+                        <ol class="mb-0">
+                            <li class="mb-2">Create a group called "Goa Weekend" with Alice, Bob, and Charlie</li>
+                            <li class="mb-2">Alice pays ₹6,000 for the hotel → Add expense: "Hotel booking" (split equally)</li>
+                            <li class="mb-2">Bob pays ₹1,500 for dinner → Add expense: "Dinner at Beach Shack" (split equally)</li>
+                            <li class="mb-2">Check balances: Alice is owed ₹4,000, Bob is owed ₹500, Charlie owes ₹4,500</li>
+                            <li class="mb-2">Charlie pays Alice ₹4,000 → Record settlement</li>
+                            <li>New balances update automatically!</li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+
+            <section class="mb-5">
+                <div class="card shadow-sm border-light-subtle bg-light">
+                    <div class="card-body p-4">
+                        <h3 class="h5 mb-3"><i class="bi bi-calculator-fill text-success me-2"></i>Quick Split Calculator</h3>
+                        <p class="mb-3">Don't need to save the group? Use the <strong>Quick Split</strong> calculator on the home page for one-off calculations. Just enter the total amount and number of people, and we'll tell you how much each person owes.</p>
+                        <a href="{{ url_for('index') }}" class="btn btn-outline-success">
+                            <i class="bi bi-arrow-right-circle me-1"></i> Try Quick Split
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <section class="text-center">
+                <div class="card shadow-sm">
+                    <div class="card-body p-4">
+                        <h3 class="h5 mb-3">Ready to Start?</h3>
+                        <p class="text-muted mb-3">Create your first group and experience hassle-free expense management!</p>
+                        <a href="{{ url_for('create_group') }}" class="btn btn-primary btn-lg">
+                            <i class="bi bi-plus-circle me-2"></i>Create Your First Group
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+{% endblock %}
