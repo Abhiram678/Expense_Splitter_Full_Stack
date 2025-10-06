@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block title %}{{ group.name }} - Expense Splitter{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 border-bottom pb-3">
+        <div>
+            <h1 class="h2">{{ group.name }}</h1>
+            <p class="text-muted mb-0">{{ group.description or 'No description provided for this group.' }}</p>
+        </div>
+        <div class="d-flex gap-2 mt-3 mt-md-0">
+            <a href="{{ url_for('add_expense', group_id=group.id) }}" class="btn btn-success shadow-sm">
+                <i class="bi bi-plus-lg me-1"></i> Add Expense
+            </a>
+            <a href="{{ url_for('settle_up', group_id=group.id) }}" class="btn btn-primary shadow-sm">
+                <i class="bi bi-check2-circle me-1"></i> Settle Up
+            </a>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Main Content Column -->
+        <div class="col-lg-8">
+            <!-- Expenses Section -->
+            <section class="mb-4">
+                <h4 class="mb-3"><i class="bi bi-receipt me-2"></i>Expenses</h4>
+                <div class="card shadow-sm border-light-subtle">
+                    {% if expenses %}
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Description</th>
+                                    <th>Amount</th>
+                                    <th>Paid by</th>
+                                    <th>Date</th>
+                                    <th class="text-end">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for expense in expenses %}
+                                <tr>
+                                    <td class="fw-medium">{{ expense.description }}</td>
+                                    <td>₹{{ "%.2f"|format(expense.amount) }}</td>
+                                    <td>{{ expense.paid_by_name }}</td>
+                                    <td class="text-muted">{{ expense.date }}</td>
+                                    <td class="text-end">
+                                        <form method="POST" action="{{ url_for('delete_expense', expense_id=expense.id) }}" class="d-inline">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger" 
+                                                    onclick="return confirm('Are you sure you want to delete this expense?')">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="card-body text-center">
+                        <p class="mb-0 text-muted">No expenses recorded yet. Click "Add Expense" to get started!</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </section>
+
+            <!-- Settlements Section -->
+            {% if settlements %}
+            <section>
+                <h4 class="mb-3"><i class="bi bi-check2-square me-2"></i>Settlement History</h4>
+                <div class="card shadow-sm border-light-subtle">
+                    <div class="table-responsive">
+                        <table class="table mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Transaction</th>
+                                    <th>Amount</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for settlement in settlements %}
+                                <tr>
+                                    <td>
+                                        <span class="fw-medium">{{ settlement.from_name }}</span>
+                                        <i class="bi bi-arrow-right mx-2"></i>
+                                        <span class="fw-medium">{{ settlement.to_name }}</span>
+                                    </td>
+                                    <td><span class="badge bg-success-subtle text-success-emphasis">₹{{ "%.2f"|format(settlement.amount) }}</span></td>
+                                    <td class="text-muted">{{ settlement.date }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+            {% endif %}
+        </div>
+
+        <!-- Side Column for Balances & Members -->
+        <div class="col-lg-4">
+            <!-- Balances Section -->
+            <section class="mb-4">
+                <h4 class="mb-3"><i class="bi bi-wallet2 me-2"></i>Balances</h4>
+                <div class="list-group shadow-sm">
+                    {% for member_id, balance_info in balances.items() %}
+                    <div class="list-group-item">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">{{ balance_info.name }}</h6>
+                            <span class="fw-bold {% if balance_info.balance > 0 %}text-success{% elif balance_info.balance < 0 %}text-danger{% else %}text-muted{% endif %}">
+                                {% if balance_info.balance > 0 %}
+                                    Owed ₹{{ "%.2f"|format(balance_info.balance) }}
+                                {% elif balance_info.balance < 0 %}
+                                    Owes ₹{{ "%.2f"|format(balance_info.balance|abs) }}
+                                {% else %}
+                                    Settled
+                                {% endif %}
+                            </span>
+                        </div>
+                        <small class="text-muted">
+                            Paid: ₹{{ "%.2f"|format(balance_info.paid) }} | Share: ₹{{ "%.2f"|format(balance_info.owed) }}
+                        </small>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+
+            <!-- Members Section -->
+            <section>
+                <h4 class="mb-3"><i class="bi bi-people-fill me-2"></i>Members</h4>
+                <div class="card shadow-sm border-light-subtle">
+                    <ul class="list-group list-group-flush">
+                        {% for member in members %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{ member.name }}
+                            <form method="POST" action="{{ url_for('delete_member', member_id=member.id) }}" class="d-inline">
+                                <button type="submit" class="btn btn-sm btn-link text-danger" onclick="return confirm('Are you sure you want to remove this member? Their expense history will be deleted.')">
+                                    <i class="bi bi-x-circle"></i>
+                                </button>
+                            </form>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+{% endblock %}

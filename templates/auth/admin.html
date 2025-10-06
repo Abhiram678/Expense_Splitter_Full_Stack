@@ -1,0 +1,208 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - Expense Splitter{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Admin Header -->
+    <header class="text-center mb-5 pb-4 border-bottom">
+        <h1 class="display-5 fw-bold">
+            <i class="bi bi-shield-check text-primary"></i> Admin Dashboard
+        </h1>
+        <p class="lead text-muted">Manage users and system statistics</p>
+    </header>
+    
+    <!-- Statistics Cards -->
+    <section class="row g-4 mb-5">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm hover-card h-100">
+                <div class="card-body text-center">
+                    <div class="text-primary mb-3" style="font-size: 2.5rem;">
+                        <i class="bi bi-people-fill"></i>
+                    </div>
+                    <h3 class="h2 mb-0">{{ stats.total_users }}</h3>
+                    <p class="text-muted mb-0">Total Users</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm hover-card h-100">
+                <div class="card-body text-center">
+                    <div class="text-success mb-3" style="font-size: 2.5rem;">
+                        <i class="bi bi-collection-fill"></i>
+                    </div>
+                    <h3 class="h2 mb-0">{{ stats.total_groups }}</h3>
+                    <p class="text-muted mb-0">Total Groups</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm hover-card h-100">
+                <div class="card-body text-center">
+                    <div class="text-info mb-3" style="font-size: 2.5rem;">
+                        <i class="bi bi-receipt"></i>
+                    </div>
+                    <h3 class="h2 mb-0">{{ stats.total_expenses }}</h3>
+                    <p class="text-muted mb-0">Total Expenses</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm hover-card h-100">
+                <div class="card-body text-center">
+                    <div class="text-warning mb-3" style="font-size: 2.5rem;">
+                        <i class="bi bi-shield-fill-check"></i>
+                    </div>
+                    <h3 class="h2 mb-0">{{ stats.admin_users }}</h3>
+                    <p class="text-muted mb-0">Admin Users</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- User Management -->
+    <section>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="h4 mb-0">
+                <i class="bi bi-people me-2"></i>User Management
+            </h2>
+            <span class="badge bg-primary rounded-pill fs-6">{{ users|length }} users</span>
+        </div>
+        
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="bg-light">
+                            <tr>
+                                <th scope="col" class="px-4 py-3">
+                                    <i class="bi bi-hash me-1"></i>ID
+                                </th>
+                                <th scope="col" class="py-3">
+                                    <i class="bi bi-person me-1"></i>Username
+                                </th>
+                                <th scope="col" class="py-3">
+                                    <i class="bi bi-envelope me-1"></i>Email
+                                </th>
+                                <th scope="col" class="py-3">
+                                    <i class="bi bi-shield me-1"></i>Role
+                                </th>
+                                <th scope="col" class="py-3">
+                                    <i class="bi bi-calendar me-1"></i>Joined
+                                </th>
+                                <th scope="col" class="py-3 text-center">
+                                    <i class="bi bi-gear me-1"></i>Actions
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in users %}
+                            <tr>
+                                <td class="px-4 py-3 fw-semibold">{{ user.id }}</td>
+                                <td class="py-3">
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-circle bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-2" 
+                                             style="width: 36px; height: 36px; font-size: 0.9rem; font-weight: 600;">
+                                            {{ user.username[0].upper() }}
+                                        </div>
+                                        <span class="fw-semibold">{{ user.username }}</span>
+                                        {% if user.id == session.user_id %}
+                                            <span class="badge bg-info ms-2">You</span>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                                <td class="py-3">
+                                    <i class="bi bi-envelope-fill text-muted me-1"></i>
+                                    {{ user.email }}
+                                </td>
+                                <td class="py-3">
+                                    {% if user.role == 'admin' %}
+                                        <span class="badge bg-danger">
+                                            <i class="bi bi-shield-fill-check me-1"></i>Admin
+                                        </span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">
+                                            <i class="bi bi-person me-1"></i>User
+                                        </span>
+                                    {% endif %}
+                                </td>
+                                <td class="py-3 text-muted small">
+                                    {{ user.created_at.split('.')[0] if '.' in user.created_at else user.created_at }}
+                                </td>
+                                <td class="py-3 text-center">
+                                    {% if user.id != session.user_id %}
+                                        <div class="btn-group btn-group-sm" role="group">
+                                            <form method="POST" action="{{ url_for('toggle_user_role', user_id=user.id) }}" class="d-inline">
+                                                <button type="submit" class="btn btn-sm btn-outline-primary" 
+                                                        title="Toggle role">
+                                                    <i class="bi bi-arrow-repeat"></i>
+                                                    {% if user.role == 'user' %}
+                                                        Make Admin
+                                                    {% else %}
+                                                        Make User
+                                                    {% endif %}
+                                                </button>
+                                            </form>
+                                            
+                                            <form method="POST" action="{{ url_for('delete_user', user_id=user.id) }}" 
+                                                  class="d-inline ms-2"
+                                                  onsubmit="return confirm('Are you sure you want to delete this user? This action cannot be undone.')">
+                                                <button type="submit" class="btn btn-sm btn-outline-danger" 
+                                                        title="Delete user">
+                                                    <i class="bi bi-trash"></i> Delete
+                                                </button>
+                                            </form>
+                                        </div>
+                                    {% else %}
+                                        <span class="text-muted small">—</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        {% if users|length == 0 %}
+        <div class="text-center py-5">
+            <i class="bi bi-inbox fs-1 text-muted"></i>
+            <p class="text-muted mt-3">No users found</p>
+        </div>
+        {% endif %}
+    </section>
+    
+    <!-- Back to Home -->
+    <div class="text-center mt-5 pt-4">
+        <a href="{{ url_for('index') }}" class="btn btn-outline-primary btn-lg">
+            <i class="bi bi-arrow-left me-2"></i>Back to Dashboard
+        </a>
+    </div>
+</div>
+
+<style>
+    .avatar-circle {
+        flex-shrink: 0;
+    }
+    
+    .table thead th {
+        border-bottom: 2px solid #dee2e6;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+    }
+    
+    .table tbody tr {
+        transition: all 0.2s ease;
+    }
+    
+    .table tbody tr:hover {
+        background-color: #f8f9fa;
+    }
+</style>
+{% endblock %}

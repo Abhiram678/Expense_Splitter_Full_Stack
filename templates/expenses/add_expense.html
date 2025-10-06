@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}Add Expense - {{ group.name }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-7">
+        <div class="card shadow-sm border-light-subtle">
+            <div class="card-header bg-white border-bottom-0">
+                <h4 class="mb-0 text-center py-2"><i class="bi bi-currency-rupee me-2"></i>Add an Expense</h4>
+                <p class="text-center text-muted mb-0">For group: <strong>{{ group.name }}</strong></p>
+            </div>
+            <div class="card-body p-4">
+                <form method="POST" action="{{ url_for('add_expense', group_id=group.id) }}" id="add-expense-form" novalidate>
+                    <input type="hidden" id="member-count" value="{{ members|length }}">
+                    
+                    <!-- Description -->
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <input type="text" class="form-control form-control-lg" id="description" name="description" 
+                               placeholder="e.g., Groceries, Dinner, Movie tickets" required>
+                        <div class="invalid-feedback">An expense description is required.</div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <!-- Amount -->
+                        <div class="col-md-6">
+                            <label for="amount" class="form-label">Amount</label>
+                            <div class="input-group">
+                                <span class="input-group-text">₹</span>
+                                <input type="number" step="0.01" class="form-control form-control-lg" id="amount" name="amount" 
+                                       placeholder="0.00" required min="0.01">
+                                <div class="invalid-feedback">Please enter a valid amount.</div>
+                            </div>
+                        </div>
+
+                        <!-- Paid By -->
+                        <div class="col-md-6">
+                            <label for="paid_by" class="form-label">Paid By</label>
+                            <select class="form-select form-select-lg" id="paid_by" name="paid_by" required>
+                                <option value="" disabled selected>Select member...</option>
+                                {% for member in members %}
+                                <option value="{{ member.id }}">{{ member.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="invalid-feedback">Please select who paid.</div>
+                        </div>
+                    </div>
+
+                    <!-- Split Type -->
+                    <div class="mb-3">
+                        <label class="form-label">How to split?</label>
+                        <div class="btn-group w-100" role="group" aria-label="Split type">
+                            <input type="radio" class="btn-check" name="split_type" id="split_equal" value="equal" autocomplete="off" checked>
+                            <label class="btn btn-outline-primary" for="split_equal"><i class="bi bi-distribute-vertical me-2"></i>Split Equally</label>
+                            
+                            <input type="radio" class="btn-check" name="split_type" id="split_custom" value="custom" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="split_custom"><i class="bi bi-ui-checks me-2"></i>Custom Split</label>
+                        </div>
+                        <div class="form-text mt-2" id="equal-share-text">
+                            Each of the {{ members|length }} members will owe ₹<span id="equal-share">0.00</span>.
+                        </div>
+                    </div>
+
+                    <!-- Custom Split Inputs (hidden by default) -->
+                    <div id="custom-split-section" class="mb-3 p-3 bg-light rounded" style="display: none;">
+                        <label class="form-label fw-bold">Custom Shares</label>
+                        <p class="form-text mt-0 mb-2">Enter the exact amount each person owes. The total must match the expense amount.</p>
+                        {% for member in members %}
+                        <div class="input-group mb-2">
+                            <span class="input-group-text" style="width: 120px;">{{ member.name }}</span>
+                            <span class="input-group-text">₹</span>
+                            <input type="number" step="0.01" class="form-control custom-share" 
+                                   name="share_{{ member.id }}" placeholder="0.00" min="0">
+                        </div>
+                        {% endfor %}
+                        <div class="d-flex justify-content-between fw-bold mt-2">
+                            <span>Total of shares:</span>
+                            <span id="custom-total-feedback">₹<span id="custom-total">0.00</span></span>
+                        </div>
+                        <div id="custom-split-error" class="text-danger small mt-1" style="display: none;">
+                            The total of custom shares must equal the total expense amount.
+                        </div>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-success btn-lg"><i class="bi bi-check-circle me-2"></i>Add Expense</button>
+                        <a href="{{ url_for('group_detail', group_id=group.id) }}" class="btn btn-outline-secondary">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

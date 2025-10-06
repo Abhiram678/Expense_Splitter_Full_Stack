@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}Settle Up - {{ group.name }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10 col-lg-8">
+        <div class="card shadow-sm border-light-subtle">
+            <div class="card-header bg-white border-bottom-0">
+                <h4 class="mb-0 text-center py-2"><i class="bi bi-check2-circle me-2"></i>Settle Up</h4>
+                <p class="text-center text-muted mb-0">Record a payment between members in <strong>{{ group.name }}</strong></p>
+            </div>
+            <div class="card-body p-4">
+                <!-- Settlement Form -->
+                <form method="POST" action="{{ url_for('settle_up', group_id=group.id) }}" id="settle-up-form" novalidate>
+                    <div class="row g-3 align-items-center">
+                        <div class="col-md-5">
+                            <label for="from_member" class="form-label">Who Paid?</label>
+                            <select class="form-select form-select-lg" id="from_member" name="from_member" required>
+                                <option value="" disabled selected>Select member...</option>
+                                {% for member in members %}
+                                <option value="{{ member.id }}">{{ member.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="invalid-feedback">Select the paying member.</div>
+                        </div>
+                        <div class="col-md-5">
+                            <label for="to_member" class="form-label">Who Received?</label>
+                            <select class="form-select form-select-lg" id="to_member" name="to_member" required>
+                                <option value="" disabled selected>Select member...</option>
+                                {% for member in members %}
+                                <option value="{{ member.id }}">{{ member.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="invalid-feedback">Select the receiving member.</div>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="amount" class="form-label">Amount</label>
+                            <div class="input-group">
+                                <input type="number" step="0.01" class="form-control form-control-lg" id="amount" 
+                                       name="amount" placeholder="0.00" required min="0.01">
+                                <div class="invalid-feedback">Enter a valid amount.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="settle-validation-error" class="text-danger small mt-2" style="display: none;">
+                        The paying and receiving member cannot be the same person.
+                    </div>
+
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="bi bi-check-circle me-2"></i>Record Payment
+                        </button>
+                        <a href="{{ url_for('group_detail', group_id=group.id) }}" class="btn btn-outline-secondary">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Current Balances -->
+        <section class="mt-5">
+            <h5 class="mb-3 text-center">For Reference: Current Balances</h5>
+            <div class="row g-3 justify-content-center">
+                {% for member_id, balance_info in balances.items() %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="card text-center {% if balance_info.balance > 0 %}border-success{% elif balance_info.balance < 0 %}border-danger{% else %}border-light{% endif %}">
+                        <div class="card-header bg-transparent fw-bold">{{ balance_info.name }}</div>
+                        <div class="card-body">
+                            <p class="card-text h5 {% if balance_info.balance > 0 %}text-success{% elif balance_info.balance < 0 %}text-danger{% else %}text-muted{% endif %}">
+                                {% if balance_info.balance > 0 %}
+                                    Is owed ₹{{ "%.2f"|format(balance_info.balance) }}
+                                {% elif balance_info.balance < 0 %}
+                                    Owes ₹{{ "%.2f"|format(balance_info.balance|abs) }}
+                                {% else %}
+                                    Settled Up
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock %}

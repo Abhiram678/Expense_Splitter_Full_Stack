@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Expense Splitter</title>
+    
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-blue: #5da2d5;
+            --secondary-green: #90ee90;
+            --dark-blue: #4a8bb8;
+            --dark-green: #7fdf7f;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--secondary-green) 0%, var(--dark-green) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 40px 20px;
+        }
+        
+        .register-container {
+            max-width: 500px;
+            width: 100%;
+        }
+        
+        .register-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            animation: slideDown 0.5s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .register-header {
+            background: linear-gradient(135deg, var(--secondary-green), var(--dark-green));
+            color: #2d6b2d;
+            padding: 40px 30px;
+            text-align: center;
+        }
+        
+        .register-header i {
+            font-size: 4rem;
+            margin-bottom: 15px;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .register-header h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin: 0;
+        }
+        
+        .register-header p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+        }
+        
+        .register-body {
+            padding: 40px 30px;
+        }
+        
+        .form-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        
+        .form-control {
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 12px 15px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            border-color: var(--secondary-green);
+            box-shadow: 0 0 0 0.2rem rgba(144, 238, 144, 0.25);
+        }
+        
+        .input-group-text {
+            background: transparent;
+            border: 2px solid #e0e0e0;
+            border-right: none;
+            border-radius: 10px 0 0 10px;
+        }
+        
+        .input-group .form-control {
+            border-left: none;
+            border-radius: 0 10px 10px 0;
+        }
+        
+        .input-group:focus-within .input-group-text {
+            border-color: var(--secondary-green);
+        }
+        
+        .btn-register {
+            background: linear-gradient(135deg, var(--secondary-green), var(--dark-green));
+            border: none;
+            border-radius: 10px;
+            padding: 14px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2d6b2d;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(144, 238, 144, 0.4);
+        }
+        
+        .btn-register:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(144, 238, 144, 0.6);
+            color: #2d6b2d;
+        }
+        
+        .btn-back {
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            border: none;
+            border-radius: 10px;
+            padding: 14px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: white;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-back:hover {
+            transform: translateY(-2px);
+            color: white;
+        }
+        
+        .alert {
+            border-radius: 10px;
+            border: none;
+        }
+        
+        .password-toggle {
+            cursor: pointer;
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            z-index: 10;
+        }
+        
+        .password-toggle:hover {
+            color: var(--secondary-green);
+        }
+        
+        .password-strength {
+            height: 5px;
+            border-radius: 3px;
+            margin-top: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .text-small {
+            font-size: 0.85rem;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <div class="register-card">
+            <div class="register-header">
+                <i class="bi bi-person-plus-fill"></i>
+                <h1>Create Account</h1>
+                <p>Join Expense Splitter today</p>
+            </div>
+            
+            <div class="register-body">
+                <!-- Flash Messages -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                
+                <form method="POST" action="{{ url_for('register') }}" id="registerForm">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">
+                            <i class="bi bi-person-fill me-1"></i>Username
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="bi bi-person"></i>
+                            </span>
+                            <input type="text" class="form-control" id="username" name="username" 
+                                   placeholder="Choose a username" required autofocus>
+                        </div>
+                        <small class="text-small">3-20 characters, letters and numbers only</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="email" class="form-label">
+                            <i class="bi bi-envelope-fill me-1"></i>Email Address
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="bi bi-envelope"></i>
+                            </span>
+                            <input type="email" class="form-control" id="email" name="email" 
+                                   placeholder="your.email@example.com" required>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="password" class="form-label">
+                            <i class="bi bi-lock-fill me-1"></i>Password
+                        </label>
+                        <div class="input-group position-relative">
+                            <span class="input-group-text">
+                                <i class="bi bi-lock"></i>
+                            </span>
+                            <input type="password" class="form-control" id="password" name="password" 
+                                   placeholder="Create a strong password" required minlength="6">
+                            <i class="bi bi-eye password-toggle" id="togglePassword"></i>
+                        </div>
+                        <div class="password-strength bg-light" id="passwordStrength"></div>
+                        <small class="text-small">Minimum 6 characters</small>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="confirm_password" class="form-label">
+                            <i class="bi bi-lock-fill me-1"></i>Confirm Password
+                        </label>
+                        <div class="input-group position-relative">
+                            <span class="input-group-text">
+                                <i class="bi bi-lock"></i>
+                            </span>
+                            <input type="password" class="form-control" id="confirm_password" name="confirm_password" 
+                                   placeholder="Re-enter your password" required minlength="6">
+                            <i class="bi bi-eye password-toggle" id="toggleConfirmPassword"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-3">
+                        <button type="submit" class="btn btn-register">
+                            <i class="bi bi-person-plus me-2"></i>Create Account
+                        </button>
+                        <a href="{{ url_for('login') }}" class="btn btn-back text-center">
+                            <i class="bi bi-arrow-left me-2"></i>Back to Login
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Password toggle for password field
+        const togglePassword = document.getElementById('togglePassword');
+        const password = document.getElementById('password');
+        
+        togglePassword.addEventListener('click', function() {
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+            this.classList.toggle('bi-eye');
+            this.classList.toggle('bi-eye-slash');
+        });
+        
+        // Password toggle for confirm password
+        const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+        const confirmPassword = document.getElementById('confirm_password');
+        
+        toggleConfirmPassword.addEventListener('click', function() {
+            const type = confirmPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+            confirmPassword.setAttribute('type', type);
+            this.classList.toggle('bi-eye');
+            this.classList.toggle('bi-eye-slash');
+        });
+        
+        // Password strength indicator
+        const passwordStrength = document.getElementById('passwordStrength');
+        
+        password.addEventListener('input', function() {
+            const value = this.value;
+            let strength = 0;
+            
+            if (value.length >= 6) strength++;
+            if (value.length >= 10) strength++;
+            if (/[a-z]/.test(value) && /[A-Z]/.test(value)) strength++;
+            if (/[0-9]/.test(value)) strength++;
+            if (/[^a-zA-Z0-9]/.test(value)) strength++;
+            
+            passwordStrength.style.width = (strength * 20) + '%';
+            
+            if (strength <= 1) {
+                passwordStrength.style.backgroundColor = '#dc3545';
+            } else if (strength <= 3) {
+                passwordStrength.style.backgroundColor = '#ffc107';
+            } else {
+                passwordStrength.style.backgroundColor = '#28a745';
+            }
+        });
+        
+        // Form validation
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            const pwd = password.value;
+            const confirmPwd = confirmPassword.value;
+            
+            if (pwd !== confirmPwd) {
+                e.preventDefault();
+                alert('Passwords do not match!');
+                return false;
+            }
+        });
+    </script>
+</body>
+</html>
