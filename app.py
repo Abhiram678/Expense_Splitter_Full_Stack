@@ -43,97 +43,97 @@ def init_db():
         conn = get_db()
         cursor = conn.cursor()
         print("Database initialization started...")
-    
-    # Users table for authentication
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT UNIQUE NOT NULL,
-            email TEXT UNIQUE NOT NULL,
-            password_hash TEXT NOT NULL,
-            role TEXT DEFAULT 'user',
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-    ''')
-    
-    # Create default admin user if not exists
-    cursor.execute('SELECT COUNT(*) FROM users WHERE role = "admin"')
-    admin_count = cursor.fetchone()[0]
-    if admin_count == 0:
-        admin_hash = generate_password_hash('admin123')
+        
+        # Users table for authentication
         cursor.execute('''
-            INSERT INTO users (username, email, password_hash, role)
-            VALUES (?, ?, ?, ?)
-        ''', ('admin', 'admin@expensesplitter.com', admin_hash, 'admin'))
-        conn.commit()
-    
-    # Groups table - add user_id to track ownership
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS groups (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            description TEXT,
-            user_id INTEGER,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-        )
-    ''')
-    
-    # Members table
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS members (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            email TEXT,
-            group_id INTEGER,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY (group_id) REFERENCES groups(id) ON DELETE CASCADE
-        )
-    ''')
-    
-    # Expenses table
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS expenses (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            group_id INTEGER,
-            description TEXT NOT NULL,
-            amount REAL NOT NULL,
-            paid_by INTEGER,
-            split_type TEXT DEFAULT 'equal',
-            date DATE DEFAULT CURRENT_DATE,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY (group_id) REFERENCES groups(id) ON DELETE CASCADE,
-            FOREIGN KEY (paid_by) REFERENCES members(id)
-        )
-    ''')
-    
-    # Expense splits table
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS expense_splits (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            expense_id INTEGER,
-            member_id INTEGER,
-            share_amount REAL NOT NULL,
-            FOREIGN KEY (expense_id) REFERENCES expenses(id) ON DELETE CASCADE,
-            FOREIGN KEY (member_id) REFERENCES members(id)
-        )
-    ''')
-    
-    # Settlements table
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS settlements (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            group_id INTEGER,
-            from_member INTEGER,
-            to_member INTEGER,
-            amount REAL NOT NULL,
-            settled_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY (group_id) REFERENCES groups(id) ON DELETE CASCADE,
-            FOREIGN KEY (from_member) REFERENCES members(id),
-            FOREIGN KEY (to_member) REFERENCES members(id)
-        )
-    ''')
-    
+            CREATE TABLE IF NOT EXISTS users (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                username TEXT UNIQUE NOT NULL,
+                email TEXT UNIQUE NOT NULL,
+                password_hash TEXT NOT NULL,
+                role TEXT DEFAULT 'user',
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        ''')
+        
+        # Create default admin user if not exists
+        cursor.execute('SELECT COUNT(*) FROM users WHERE role = "admin"')
+        admin_count = cursor.fetchone()[0]
+        if admin_count == 0:
+            admin_hash = generate_password_hash('admin123')
+            cursor.execute('''
+                INSERT INTO users (username, email, password_hash, role)
+                VALUES (?, ?, ?, ?)
+            ''', ('admin', 'admin@expensesplitter.com', admin_hash, 'admin'))
+            conn.commit()
+        
+        # Groups table - add user_id to track ownership
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS groups (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL,
+                description TEXT,
+                user_id INTEGER,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+            )
+        ''')
+        
+        # Members table
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS members (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL,
+                email TEXT,
+                group_id INTEGER,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (group_id) REFERENCES groups(id) ON DELETE CASCADE
+            )
+        ''')
+        
+        # Expenses table
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS expenses (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                group_id INTEGER,
+                description TEXT NOT NULL,
+                amount REAL NOT NULL,
+                paid_by INTEGER,
+                split_type TEXT DEFAULT 'equal',
+                date DATE DEFAULT CURRENT_DATE,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (group_id) REFERENCES groups(id) ON DELETE CASCADE,
+                FOREIGN KEY (paid_by) REFERENCES members(id)
+            )
+        ''')
+        
+        # Expense splits table
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS expense_splits (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                expense_id INTEGER,
+                member_id INTEGER,
+                share_amount REAL NOT NULL,
+                FOREIGN KEY (expense_id) REFERENCES expenses(id) ON DELETE CASCADE,
+                FOREIGN KEY (member_id) REFERENCES members(id)
+            )
+        ''')
+        
+        # Settlements table
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS settlements (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                group_id INTEGER,
+                from_member INTEGER,
+                to_member INTEGER,
+                amount REAL NOT NULL,
+                settled_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (group_id) REFERENCES groups(id) ON DELETE CASCADE,
+                FOREIGN KEY (from_member) REFERENCES members(id),
+                FOREIGN KEY (to_member) REFERENCES members(id)
+            )
+        ''')
+        
         conn.commit()
         conn.close()
         print("Database initialization completed successfully!")
