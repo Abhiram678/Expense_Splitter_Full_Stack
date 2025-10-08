@@ -2,27 +2,20 @@
 Expense Splitter - Flask Application
 A simple bill splitting app for groups with user authentication
 """
-
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 import sqlite3
 from datetime import datetime
 import os
-
 app = Flask(__name__)
-app.secret_key = 'your-secret-key-here-change-in-production'
-
-DATABASE = 'database.db'
-
-
+app.secret_key = os.environ.get('SECRET_KEY', 'your-secret-key-here-change-in-production')
+DATABASE = os.environ.get('DATABASE_URL', 'database.db')
 def get_db():
     """Get database connection"""
     conn = sqlite3.connect(DATABASE)
     conn.row_factory = sqlite3.Row
     return conn
-
-
 def login_required(f):
     """Decorator to require login for routes"""
     @wraps(f)
@@ -32,8 +25,6 @@ def login_required(f):
             return redirect(url_for('login'))
         return f(*args, **kwargs)
     return decorated_function
-
-
 def admin_required(f):
     """Decorator to require admin role"""
     @wraps(f)
@@ -46,8 +37,6 @@ def admin_required(f):
             return redirect(url_for('index'))
         return f(*args, **kwargs)
     return decorated_function
-
-
 def init_db():
     """Initialize database with tables (idempotent)."""
     conn = get_db()
@@ -145,8 +134,6 @@ def init_db():
     
     conn.commit()
     conn.close()
-
-
 def calculate_balances(group_id):
     """Calculate who owes whom in a group"""
     conn = get_db()
@@ -194,13 +181,9 @@ def calculate_balances(group_id):
     
     conn.close()
     return balances
-
-
 @app.route('/health')
 def health():
     return {'status': 'ok'}
-
-
 @app.route('/')
 @login_required
 def index():
@@ -223,8 +206,6 @@ def index():
     
     conn.close()
     return render_template('index.html', groups=groups)
-
-
 @app.route('/submit', methods=['POST'])
 @login_required
 def quick_split_submit():
@@ -241,33 +222,23 @@ def quick_split_submit():
     except Exception:
         flash('Please enter a positive amount and number of people.', 'danger')
         return redirect(url_for('index'))
-
-
 @app.route('/success')
 @login_required
 def success():
     msg = request.args.get('msg', 'Action completed successfully!')
     return render_template('success.html', message=msg)
-
-
 @app.route('/about')
 def about():
     """About page"""
     return render_template('about.html')
-
-
 @app.route('/how-it-works')
 def how_it_works():
     """How it works page"""
     return render_template('how_it_works.html')
-
-
 @app.route('/help')
 def help_page():
     """Help and FAQ page"""
     return render_template('help.html')
-
-
 @app.route('/groups/create', methods=['GET', 'POST'])
 @login_required
 def create_group():
@@ -312,8 +283,6 @@ def create_group():
         return redirect(url_for('group_detail', group_id=group_id))
     
     return render_template('groups/create_group.html')
-
-
 @app.route('/groups/<int:group_id>')
 @login_required
 def group_detail(group_id):
@@ -363,8 +332,6 @@ def group_detail(group_id):
                          expenses=expenses,
                          balances=balances,
                          settlements=settlements)
-
-
 @app.route('/groups/<int:group_id>/add_expense', methods=['GET', 'POST'])
 @login_required
 def add_expense(group_id):
@@ -444,8 +411,6 @@ def add_expense(group_id):
     
     conn.close()
     return render_template('expenses/add_expense.html', group=group, members=members)
-
-
 @app.route('/groups/<int:group_id>/settle', methods=['GET', 'POST'])
 @login_required
 def settle_up(group_id):
@@ -481,8 +446,6 @@ def settle_up(group_id):
     
     conn.close()
     return render_template('settlements/settle_up.html', group=group, members=members, balances=balances)
-
-
 @app.route('/expenses/<int:expense_id>/delete', methods=['POST'])
 @login_required
 def delete_expense(expense_id):
@@ -501,8 +464,6 @@ def delete_expense(expense_id):
     conn.close()
     flash('Expense not found!', 'danger')
     return redirect(url_for('index'))
-
-
 @app.route('/groups/<int:group_id>/delete', methods=['POST'])
 @login_required
 def delete_group(group_id):
@@ -515,8 +476,6 @@ def delete_group(group_id):
     
     flash('Group deleted!', 'success')
     return redirect(url_for('index'))
-
-
 @app.route('/members/<int:member_id>/delete', methods=['POST'])
 @login_required
 def delete_member(member_id):
@@ -540,10 +499,6 @@ def delete_member(member_id):
     
     flash('Member removed successfully!', 'success')
     return redirect(url_for('group_detail', group_id=group_id))
-
-
-# ==================== AUTHENTICATION ROUTES ====================
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     """User login page"""
@@ -572,8 +527,6 @@ def login():
             flash('Invalid username or password.', 'danger')
     
     return render_template('auth/login.html')
-
-
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     """User registration page"""
@@ -622,16 +575,12 @@ def register():
         return redirect(url_for('login'))
     
     return render_template('auth/register.html')
-
-
 @app.route('/logout')
 def logout():
     """Log out user"""
     session.clear()
     flash('You have been logged out.', 'info')
     return redirect(url_for('login'))
-
-
 @app.route('/admin')
 @admin_required
 def admin_dashboard():
@@ -649,8 +598,6 @@ def admin_dashboard():
     
     conn.close()
     return render_template('auth/admin.html', users=users, stats=stats)
-
-
 @app.route('/admin/users/<int:user_id>/toggle-role', methods=['POST'])
 @admin_required
 def toggle_user_role(user_id):
@@ -671,8 +618,6 @@ def toggle_user_role(user_id):
     
     conn.close()
     return redirect(url_for('admin_dashboard'))
-
-
 @app.route('/admin/users/<int:user_id>/delete', methods=['POST'])
 @admin_required
 def delete_user(user_id):
@@ -689,15 +634,7 @@ def delete_user(user_id):
     
     flash('User deleted successfully.', 'success')
     return redirect(url_for('admin_dashboard'))
-
-
 if __name__ == '__main__':
     # Initialize database (idempotent)
     init_db()
     app.run(debug=True)
-#   P r o j e c t   i n i t i a l i z e d  
- #   A u t h e n t i c a t i o n   a d d e d  
- #   G r o u p   m a n a g e m e n t   a d d e d  
- #   E x p e n s e   t r a c k i n g   a d d e d  
- #   S e t t l e m e n t   s y s t e m   a d d e d  
- 
