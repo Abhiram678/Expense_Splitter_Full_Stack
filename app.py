@@ -39,8 +39,10 @@ def admin_required(f):
     return decorated_function
 def init_db():
     """Initialize database with tables (idempotent)."""
-    conn = get_db()
-    cursor = conn.cursor()
+    try:
+        conn = get_db()
+        cursor = conn.cursor()
+        print("Database initialization started...")
     
     # Users table for authentication
     cursor.execute('''
@@ -132,8 +134,14 @@ def init_db():
         )
     ''')
     
-    conn.commit()
-    conn.close()
+        conn.commit()
+        conn.close()
+        print("Database initialization completed successfully!")
+    except Exception as e:
+        print(f"Database initialization error: {e}")
+        conn.close()
+        raise e
+
 def calculate_balances(group_id):
     """Calculate who owes whom in a group"""
     conn = get_db()
@@ -634,7 +642,9 @@ def delete_user(user_id):
     
     flash('User deleted successfully.', 'success')
     return redirect(url_for('admin_dashboard'))
+
+# Initialize database (idempotent) - runs on every startup
+init_db()
+
 if __name__ == '__main__':
-    # Initialize database (idempotent)
-    init_db()
     app.run(debug=True)
