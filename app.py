@@ -10,7 +10,9 @@ from datetime import datetime
 import os
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'your-secret-key-here-change-in-production')
-DATABASE = os.environ.get('DATABASE_URL', 'database.db')
+DATABASE = os.environ.get('DATABASE_URL') or 'database.db'
+print(f"DATABASE_URL env var: '{os.environ.get('DATABASE_URL')}'")
+print(f"Final DATABASE path: '{DATABASE}'")
 def get_db():
     """Get database connection"""
     conn = sqlite3.connect(DATABASE)
