@@ -209,6 +209,22 @@ def index():
     conn = get_db()
     cursor = conn.cursor()
     
+    # Safety check: ensure tables exist
+    try:
+        cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='groups'")
+        if not cursor.fetchone():
+            print("Groups table not found, reinitializing database...")
+            conn.close()
+            init_db()
+            conn = get_db()
+            cursor = conn.cursor()
+    except Exception as e:
+        print(f"Database check failed: {e}")
+        conn.close()
+        init_db()
+        conn = get_db()
+        cursor = conn.cursor()
+    
     # Only show groups belonging to the logged-in user
     groups = cursor.execute('''
         SELECT g.*, 
