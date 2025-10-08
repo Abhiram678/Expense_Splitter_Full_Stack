@@ -40,6 +40,10 @@ def admin_required(f):
 def init_db():
     """Initialize database with tables (idempotent)."""
     try:
+        print(f"Initializing database at: {DATABASE}")
+        print(f"Database file exists: {os.path.exists(DATABASE)}")
+        print(f"Current working directory: {os.getcwd()}")
+        
         conn = get_db()
         cursor = conn.cursor()
         print("Database initialization started...")
@@ -135,6 +139,12 @@ def init_db():
         ''')
         
         conn.commit()
+        
+        # Verify tables were created
+        cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
+        tables = cursor.fetchall()
+        print(f"Tables created: {[t[0] for t in tables]}")
+        
         conn.close()
         print("Database initialization completed successfully!")
     except Exception as e:
