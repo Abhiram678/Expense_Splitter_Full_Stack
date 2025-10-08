@@ -6,37 +6,7 @@ A comprehensive Flask web application for splitting bills and expenses among gro
 
 **🔗 [Try the live application](https://expense-splitter-full-stack.onrender.com)**
 
-## ✨ Features
-
-### 🔐 User Authentication
-- **Secure Registration & Login**: Password hashing with Werkzeug
-- **Admin Dashboard**: User management and system statistics
-- **Session Management**: Secure user sessions with Flask
-
-### 👥 Group Management
-- **Create Groups**: Organize expenses for trips, roommates, events
-- **Add Members**: Invite friends to expense groups
-- **Group Ownership**: Each user owns their groups privately
-
-### 💳 Expense Tracking
-- **Add Expenses**: Record shared expenses with descriptions
-- **Flexible Splitting**: Equal splits or custom amounts per person
-- **Payment Tracking**: Track who paid for each expense
-- **Date Management**: Automatic date tracking for expenses
-
-### 📊 Balance Management
-- **Automatic Calculations**: Real-time balance calculations
-- **Visual Indicators**: Color-coded balances (green=owed money, red=owes money)
-- **Settlement Tracking**: Record payments between members
-- **History**: Complete expense and settlement history
-
-### 🎨 User Experience
-- **Responsive Design**: Bootstrap 5 powered mobile-friendly UI
-- **Quick Calculator**: Instant bill splitting without creating groups
-- **Intuitive Navigation**: Clean, modern interface
-- **Flash Messages**: User feedback for all actions
-
-## 🛠️ Tech Stack
+## 🛠️ Technologies Used
 
 - **Backend**: Python 3.11+ with Flask 3.0
 - **Database**: SQLite with automatic initialization
@@ -44,7 +14,7 @@ A comprehensive Flask web application for splitting bills and expenses among gro
 - **Authentication**: Werkzeug password hashing
 - **Deployment**: Render.com with Gunicorn
 
-## 🚀 Quick Start
+## 🚀 Setup Instructions
 
 ### Prerequisites
 - Python 3.11 or higher
@@ -77,143 +47,23 @@ http://localhost:5000
 - **Username**: `admin`
 - **Password**: `admin123`
 
-## 📖 User Guide
+## 📸 Screenshots
 
-### Getting Started
-1. **Register** a new account or **login** with existing credentials
-2. **Create your first group** by clicking "Create Group"
-3. **Add members** to your group (minimum 2 required)
-4. **Start tracking expenses** by adding shared bills
+<!-- Add your screenshots here with descriptions -->
 
-### Managing Expenses
-1. **Open a group** from your dashboard
-2. **Click "Add Expense"** to record a new bill
-3. **Enter details**: description, amount, who paid
-4. **Choose split type**: equal or custom amounts
-5. **Submit** to automatically calculate balances
+**Homepage Dashboard** - Main dashboard showing user groups and quick calculator
 
-### Settling Up
-1. **View balances** on the group detail page
-2. **Click "Settle Up"** to record payments
-3. **Select payer and payee** with amount
-4. **Balances update automatically**
+**Group Creation** - Form to create new expense groups with members
 
-### Quick Calculator
-- Use the **Quick Split Calculator** on the homepage
-- Enter total amount and number of people
-- Get instant per-person calculations
+**Add Expense** - Interface for adding shared expenses with split options
 
-## 📁 Project Structure
+**Group Detail** - Detailed view of group expenses, balances, and settlements
 
-```
-Expense_Splitter_Full_Stack/
-├── app.py                      # Main Flask application
-├── requirements.txt            # Python dependencies
-├── check_db.py                # Database verification script
-├── database.db                # SQLite database (auto-created)
-├── static/
-│   ├── css/
-│   │   └── style.css          # Custom CSS styles
-│   ├── js/
-│   │   └── main.js            # JavaScript interactions
-│   └── favicon.ico            # Site favicon
-└── templates/
-    ├── base.html              # Base template with navigation
-    ├── index.html             # Homepage dashboard
-    ├── success.html           # Success message page
-    ├── about.html             # About page
-    ├── how_it_works.html      # How it works guide
-    ├── help.html              # Help and FAQ
-    ├── auth/
-    │   ├── login.html         # Login page
-    │   ├── register.html      # Registration page
-    │   └── admin.html         # Admin dashboard
-    ├── groups/
-    │   ├── create_group.html  # Create group form
-    │   └── group_detail.html  # Group management page
-    ├── expenses/
-    │   └── add_expense.html   # Add expense form
-    └── settlements/
-        └── settle_up.html     # Settlement form
-```
+**Settlement Page** - Record payments between group members
 
-## 🗄️ Database Schema
+**Admin Dashboard** - User management and system statistics
 
-The application uses SQLite with the following tables:
-
-- **`users`**: User accounts with authentication
-- **`groups`**: Expense groups with ownership
-- **`members`**: Group members
-- **`expenses`**: Expense records
-- **`expense_splits`**: How expenses are split among members
-- **`settlements`**: Payment records between members
-
-## 🔧 Development
-
-### Database Management
-```bash
-# Check database status
-python check_db.py
-
-# Initialize database manually
-python -c "from app import init_db; init_db()"
-```
-
-### Environment Variables
-- `SECRET_KEY`: Flask secret key for sessions
-- `DATABASE_URL`: Database connection string
-
-## 🚀 Deployment
-
-### Render.com Deployment
-1. Connect your GitHub repository to Render
-2. Set build command: `pip install -r requirements.txt`
-3. Set start command: `gunicorn app:app`
-4. Deploy automatically on git push
-
-### Environment Variables for Production
-- Set `SECRET_KEY` to a secure random string
-- Database will be automatically initialized
-
-## 🎯 Key Features Explained
-
-### Automatic Balance Calculation
-The app automatically calculates who owes whom based on:
-- Total amount paid by each member
-- Total amount owed by each member
-- Settlements made between members
-
-### Security Features
-- Password hashing with Werkzeug
-- Session-based authentication
-- SQL injection prevention
-- CSRF protection
-
-### User Experience
-- Responsive design works on all devices
-- Real-time balance updates
-- Intuitive navigation
-- Clear visual feedback
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 👨‍💻 Author
-
-**Abhiram678**
-- GitHub: [@Abhiram678](https://github.com/Abhiram678)
-- Project: [Expense Splitter Full Stack](https://github.com/Abhiram678/Expense_Splitter_Full_Stack)
-
-## 🙏 Acknowledgments
+**Login/Register** - User authentication pages
 
 - Flask community for excellent documentation
 - Bootstrap team for the responsive framework
@@ -222,4 +72,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**⭐ If you found this project helpful, please give it a star!**

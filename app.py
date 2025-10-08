@@ -512,6 +512,43 @@ def delete_group(group_id):
     
     flash('Group deleted!', 'success')
     return redirect(url_for('index'))
+@app.route('/groups/<int:group_id>/add_member', methods=['POST'])
+@login_required
+def add_member_to_group(group_id):
+    """Add a new member to an existing group"""
+    conn = get_db()
+    cursor = conn.cursor()
+    
+    # Verify group exists and belongs to user
+    group = cursor.execute('SELECT * FROM groups WHERE id = ? AND user_id = ?', (group_id, session['user_id'])).fetchone()
+    if not group:
+        flash('Group not found or access denied!', 'danger')
+        conn.close()
+        return redirect(url_for('index'))
+    
+    member_name = request.form.get('member_name', '').strip()
+    
+    # Validate
+    if not member_name:
+        flash('Member name is required!', 'danger')
+        conn.close()
+        return redirect(url_for('group_detail', group_id=group_id))
+    
+    # Check if member already exists in this group
+    existing_member = cursor.execute('SELECT * FROM members WHERE name = ? AND group_id = ?', (member_name, group_id)).fetchone()
+    if existing_member:
+        flash(f'Member "{member_name}" already exists in this group!', 'warning')
+        conn.close()
+        return redirect(url_for('group_detail', group_id=group_id))
+    
+    # Add the member
+    cursor.execute('INSERT INTO members (name, group_id) VALUES (?, ?)', (member_name, group_id))
+    conn.commit()
+    conn.close()
+    
+    flash(f'Member "{member_name}" added successfully!', 'success')
+    return redirect(url_for('group_detail', group_id=group_id))
+
 @app.route('/members/<int:member_id>/delete', methods=['POST'])
 @login_required
 def delete_member(member_id):

@@ -131,14 +131,42 @@
 
             <!-- Members Section -->
             <section>
-                <h4 class="mb-3"><i class="bi bi-people-fill me-2"></i>Members</h4>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="mb-0"><i class="bi bi-people-fill me-2"></i>Members</h4>
+                    <span class="badge bg-primary rounded-pill">{{ members|length }}</span>
+                </div>
+                
+                <!-- Add Member Form -->
+                <div class="card shadow-sm border-light-subtle mb-3">
+                    <div class="card-body">
+                        <h6 class="card-title"><i class="bi bi-person-plus me-2"></i>Add New Member</h6>
+                        <form method="POST" action="{{ url_for('add_member_to_group', group_id=group.id) }}" class="row g-2">
+                            <div class="col-md-8">
+                                <input type="text" name="member_name" class="form-control" 
+                                       placeholder="Enter member name" required>
+                            </div>
+                            <div class="col-md-4">
+                                <button type="submit" class="btn btn-success w-100">
+                                    <i class="bi bi-plus-circle me-1"></i>Add Member
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Members List -->
                 <div class="card shadow-sm border-light-subtle">
                     <ul class="list-group list-group-flush">
                         {% for member in members %}
                         <li class="list-group-item d-flex justify-content-between align-items-center">
-                            {{ member.name }}
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-person-circle me-2 text-muted"></i>
+                                {{ member.name }}
+                            </div>
                             <form method="POST" action="{{ url_for('delete_member', member_id=member.id) }}" class="d-inline">
-                                <button type="submit" class="btn btn-sm btn-link text-danger" onclick="return confirm('Are you sure you want to remove this member? Their expense history will be deleted.')">
+                                <button type="submit" class="btn btn-sm btn-link text-danger" 
+                                        onclick="return confirm('Are you sure you want to remove this member? Their expense history will be deleted.')"
+                                        title="Remove member">
                                     <i class="bi bi-x-circle"></i>
                                 </button>
                             </form>
